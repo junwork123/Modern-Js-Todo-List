@@ -23,10 +23,12 @@ export default class ChangeTodo {
         this.$todos.map((todo) => {
            if(todo.id === target.id){
                todo.completed = !todo.completed;
+               // completed 클래스를 추가
+               target.closest('li').classList.toggle('completed');
            }
         });
         localStorage.setItem('todos', JSON.stringify(this.$todos));
-        this.viewTodo.loadTodo();
+        this.viewTodo.render();
     }
 
     removeTodo = (target) => {

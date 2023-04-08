@@ -1,7 +1,11 @@
 export default class AddTodo {
     constructor($newTodoTitle, loadTodo) {
+        this.$newTodoTitle = $newTodoTitle;
         this.loadTodo = loadTodo;
-        $newTodoTitle.addEventListener('keyup', this.addTodo);
+        this.mount();
+    }
+    mount() {
+        this.$newTodoTitle.addEventListener('keyup', this.addTodo.bind(this));
     }
     addTodo = ({ target, key }) => {
         if (key === 'Enter' && target.value) {

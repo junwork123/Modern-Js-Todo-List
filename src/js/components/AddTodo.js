@@ -1,7 +1,11 @@
 export default class AddTodo {
-    constructor($newTodoTitle, loadTodo) {
-        this.loadTodo = loadTodo;
-        $newTodoTitle.addEventListener('keyup', this.addTodo);
+    constructor($newTodoTitle, viewTodo) {
+        this.$newTodoTitle = $newTodoTitle;
+        this.viewTodo = viewTodo;
+        this.mount();
+    }
+    mount() {
+        this.$newTodoTitle.addEventListener('keyup', this.addTodo.bind(this));
     }
     addTodo = ({ target, key }) => {
         if (key === 'Enter' && target.value) {
@@ -14,7 +18,7 @@ export default class AddTodo {
             });
             target.value = '';
             localStorage.setItem('todos', JSON.stringify(this.todos));
-            this.loadTodo();
+            this.viewTodo.loadTodo();
         }
     }
 }

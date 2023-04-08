@@ -1,36 +1,12 @@
 import { $ } from "./utils/selector.js";
 import AddTodo from "./components/AddTodo.js";
+import ViewTodo from "./components/ViewTodo.js";
 export default class App {
     constructor() {
         this.todoList = $('.todo-list');
         this.todoCount = $('.todo-count strong');
         this.newTodoTitle = $('.new-todo');
-        this.addTodo = new AddTodo(this.newTodoTitle, this.loadTodo);
-        this.loadTodo();
-    }
-    todoTemplate = ({ id, title, completed }) => {
-        return `<li id=${id} class=${completed && 'completed'} >
-                <div class="view">
-                    <input class="toggle" type="checkbox" 
-                      id=${id} ${completed && 'checked'} />
-                    <label class="label">${title}</label>
-                    <button class="destroy" id=${id}></button>
-                </div>
-                <input class="edit" value="${title}" />
-            </li>`;
-    };
-
-    viewAll = () => {
-        this.todos.map((todo) => {
-            // insertAdjacentHTML는 DOM을 새로 그리지 않고 요소를 추가한다.
-            this.todoList.insertAdjacentHTML('beforeend', this.todoTemplate(todo));
-        });
-    };
-
-    loadTodo = () => {
-        this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
-        this.todoList.innerHTML = '';
-        this.viewAll();
-        this.todoCount.innerHTML = this.todoList.querySelectorAll('li').length;
+        this.viewTodo = new ViewTodo(this.todoList, this.todoCount);
+        this.addTodo = new AddTodo(this.newTodoTitle, this.viewTodo);
     }
 }

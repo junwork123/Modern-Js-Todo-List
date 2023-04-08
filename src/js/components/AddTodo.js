@@ -1,7 +1,7 @@
 export default class AddTodo {
-    constructor($newTodoTitle, loadTodo) {
+    constructor($newTodoTitle, viewTodo) {
         this.$newTodoTitle = $newTodoTitle;
-        this.loadTodo = loadTodo;
+        this.viewTodo = viewTodo;
         this.mount();
     }
     mount() {
@@ -18,7 +18,7 @@ export default class AddTodo {
             });
             target.value = '';
             localStorage.setItem('todos', JSON.stringify(this.todos));
-            this.loadTodo();
+            this.viewTodo.loadTodo();
         }
     }
 }

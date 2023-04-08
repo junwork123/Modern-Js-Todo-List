@@ -3,6 +3,7 @@ export default class ViewTodo {
         this.$todoList = $todoList;
         this.$todoCount = $todoCount;
         this.todos = [];
+        this.render();
     }
 
     todoTemplate = ({ id, title, completed }) => {
@@ -24,7 +25,7 @@ export default class ViewTodo {
         });
     };
 
-    loadTodo = () => {
+    render = () => {
         this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
         this.$todoList.innerHTML = '';
         this.viewAll();

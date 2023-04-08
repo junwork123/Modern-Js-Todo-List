@@ -18,7 +18,7 @@ export default class AddTodo {
             });
             target.value = '';
             localStorage.setItem('todos', JSON.stringify(this.todos));
-            this.viewTodo.loadTodo();
+            this.viewTodo.render();
         }
     }
 }

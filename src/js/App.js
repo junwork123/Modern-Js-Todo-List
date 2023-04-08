@@ -1,8 +1,10 @@
-
+import AddTodo from "./components/AddTodo.js";
 export default class App {
     constructor() {
         this.$todoList = document.querySelector('.todo-list');
         this.$todoCount = document.querySelector('.todo-count strong');
+        this.$newTodoTitle = document.querySelector('.new-todo');
+        this.addTodo = new AddTodo(this.$newTodoTitle, this.loadTodo);
         this.loadTodo();
     }
     todoTemplate = ({ id, title, completed }) => {

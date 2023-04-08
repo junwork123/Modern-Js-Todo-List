@@ -33,7 +33,3 @@ export default class App {
         this.$todoCount.innerHTML = this.$todoList.querySelectorAll('li').length;
     }
 }
-
-window.onload = () => {
-    new App();
-};

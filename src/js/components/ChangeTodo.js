@@ -14,6 +14,9 @@ export default class ChangeTodo {
         if(target.classList.contains('toggle')){
            return this.toggleTodo(target);
         }
+        if(target.classList.contains('destroy')){
+            return this.removeTodo(target);
+        }
     }
 
     toggleTodo = (target) => {
@@ -24,5 +27,11 @@ export default class ChangeTodo {
         });
         localStorage.setItem('todos', JSON.stringify(this.$todos));
         this.viewTodo.loadTodo();
+    }
+
+    removeTodo = (target) => {
+        this.$todos = this.$todos.filter((todo) => todo.id !== target.id);
+        localStorage.setItem('todos', JSON.stringify(this.$todos));
+        this.viewTodo.render();
     }
 }

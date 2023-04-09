@@ -1,61 +1,45 @@
-import { ALL, ACTIVE, COMPLETED } from "../contant/TodoStatus.js";
-
-export default class ViewTodo {
-    constructor( $todoList, $todoCount ) {
+export default class EditTodo {
+    constructor(store, $todoList, viewTodo) {
+        this.store = store;
         this.$todoList = $todoList;
-        this.$todoCount = $todoCount;
-        this.filter = ALL;
-        this.todos = [];
-        this.render();
+        this.viewTodo = viewTodo;
+        this.mount();
+    }
+    mount() {
+        this.$todoList.addEventListener('dblclick', this.editTodo.bind(this));
     }
 
-    todoTemplate = ({ id, title, completed }) => {
-        return `<li id=${id} class=${completed && 'completed'} >
-                <div class="view">
-                    <input class="toggle" type="checkbox" 
-                      id=${id} ${completed && 'checked'} />
-                    <label class="label">${title}</label>
-                    <button class="destroy" id=${id}></button>
-                </div>
-                <input class="edit" value="${title}" />
-            </li>`;
-    };
-
-    renderFilteredTodoList = (filter) => {
-        switch (filter) {
-            case ALL:
-                this.renderAll(); break;
-            case ACTIVE:
-                this.renderActive(); break;
-            case COMPLETED:
-                this.renderCompleted(); break;
+    editTodoItem = ({ target, key }, originalValue) => {
+        if(!target.value) {
+            return;
+        }
+        switch (key) {
+            case 'Enter':
+                return this.updateTodoItem(target.closest('li'), target.value);
+            case 'Escape':
+                target.value = originalValue;
+                return target.closest('li').classList.remove('editing');
         }
     }
-    renderTodoList = (todoList) => {
-        todoList.map((todo) => {
-            // insertAdjacentHTML는 DOM을 새로 그리지 않고 요소를 추가한다.
-            this.$todoList.insertAdjacentHTML('beforeend', this.todoTemplate(todo));
+
+    updateTodoItem = (updateId, value) => {
+        this.todos = this.todos.map((todo) => {
+            if (todo.id === updateId) {
+                todo.title = value;
+            }
+            this.store.setTodos(this.todos);
+            this.viewTodo.render();
         });
     }
-    renderAll = () => {
-        this.renderTodoList(this.todos);
-    };
-    renderActive = () => {
-        const activeTodos = this.todos.filter((todo) => !todo.completed);
-        this.renderTodoList(activeTodos);
-    }
-    renderCompleted = () => {
-        const completedTodos = this.todos.filter((todo) => todo.completed);
-        this.renderTodoList(completedTodos);
-    }
 
-    render = (filter = ALL) => {
-        if( filter !== ALL ) {
-            this.filter = filter;
+    editTodo = ({ target }) => {
+        this.todos = this.store.getTodos();
+        if(target.className === 'label'){
+            const originValue = target.innerText;
+            target.closest('li').classList.add('editing');
+            target
+                .closest('li')
+                .addEventListener('keyup', this.editTodoItem.bind(this, originValue));
         }
-        this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
-        this.$todoList.innerHTML = '';
-        this.renderFilteredTodoList(this.filter);
-        this.$todoCount.innerHTML = this.$todoList.querySelectorAll('li').length;
     }
 }

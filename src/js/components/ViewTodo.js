@@ -1,8 +1,7 @@
-import { ALL, ACTIVE, COMPLETED } from "../contant/TodoStatus.js";
+import { FILTER_TYPE, TODO_BUTTONS } from "../utils/constants.js";
 
 export default class ViewTodo {
-    constructor( store, $todoList, $todoCount ) {
-        this.store = store;
+    constructor( $todoList, $todoCount ) {
         this.$todoList = $todoList;
         this.$todoCount = $todoCount;
         this.todos = [];
@@ -10,7 +9,7 @@ export default class ViewTodo {
     }
 
     todoTemplate = ({ id, title, completed }) => {
-        return `<li id=${id} class=${completed && 'completed'} >
+        return `<li id=${id} class=${completed && TODO_BUTTONS.COMPLETED} >
                 <div class="view">
                     <input class="toggle" type="checkbox" 
                       id=${id} ${completed && 'checked'} />
@@ -23,11 +22,11 @@ export default class ViewTodo {
 
     renderFilteredTodoList = (filter) => {
         switch (filter) {
-            case ALL:
+            case FILTER_TYPE.ALL:
                 this.renderAll(); break;
-            case ACTIVE:
+            case FILTER_TYPE.ACTIVE:
                 this.renderActive(); break;
-            case COMPLETED:
+            case FILTER_TYPE.COMPLETED:
                 this.renderCompleted(); break;
         }
     }
@@ -49,13 +48,10 @@ export default class ViewTodo {
         this.renderTodoList(completedTodos);
     }
 
-    render = (filter = ALL) => {
-        if( filter !== ALL ) {
-            this.filter = filter;
-        }
-        this.todos = this.store.getTodos();
+    render = (filter = FILTER_TYPE.ALL) => {
+        this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
         this.$todoList.innerHTML = '';
-        this.renderFilteredTodoList(this.filter);
+        this.renderFilteredTodoList(filter);
         this.$todoCount.innerHTML = this.$todoList.querySelectorAll('li').length;
     }
 }

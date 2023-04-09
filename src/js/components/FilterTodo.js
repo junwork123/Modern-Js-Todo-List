@@ -1,4 +1,4 @@
-import { ALL, ACTIVE, COMPLETED } from "../contant/TodoStatus.js";
+import { FILTER_TYPE, TODO_BUTTONS } from "../utils/constants.js";
 
 export default class FilterTodo {
     constructor($filters, viewTodo) {
@@ -11,14 +11,14 @@ export default class FilterTodo {
     }
 
     filterTodo = ({ target }) => {
-        this.$filters.querySelector('.selected').classList.remove('selected');
-        target.classList.add('selected');
+        this.$filters.querySelector('.selected').classList.remove(TODO_BUTTONS.SELECTED);
+        target.classList.add(TODO_BUTTONS.SELECTED);
         this.viewTodo.render(this.getFilter(target));
     };
 
     getFilter = (target) => {
-        if (target.classList.contains(ACTIVE)){ return ACTIVE; }
-        if (target.classList.contains(COMPLETED)){ return COMPLETED; }
-        return ALL;
+        if (target.classList.contains(FILTER_TYPE.ACTIVE)){ return FILTER_TYPE.ACTIVE; }
+        if (target.classList.contains(FILTER_TYPE.COMPLETED)){ return FILTER_TYPE.COMPLETED; }
+        return FILTER_TYPE.ALL;
     }
 }

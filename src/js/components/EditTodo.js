@@ -1,6 +1,7 @@
+import { TODO_BUTTONS } from "../utils/constants.js";
+
 export default class EditTodo {
-    constructor(store, $todoList, viewTodo) {
-        this.store = store;
+    constructor($todoList, viewTodo) {
         this.$todoList = $todoList;
         this.viewTodo = viewTodo;
         this.mount();
@@ -18,7 +19,7 @@ export default class EditTodo {
                 return this.updateTodoItem(target.closest('li'), target.value);
             case 'Escape':
                 target.value = originalValue;
-                return target.closest('li').classList.remove('editing');
+                return target.closest('li').classList.remove(TODO_BUTTONS.EDITING);
         }
     }
 
@@ -27,16 +28,16 @@ export default class EditTodo {
             if (todo.id === updateId) {
                 todo.title = value;
             }
-            this.store.setTodos(this.todos);
+            localStorage.setItem('todos', JSON.stringify(this.todos));
             this.viewTodo.render();
         });
     }
 
     editTodo = ({ target }) => {
-        this.todos = this.store.getTodos();
-        if(target.className === 'label'){
+        this.todos = JSON.parse(localStorage.getItem('todos'));
+        if(target.className === TODO_BUTTONS.LABEL){
             const originValue = target.innerText;
-            target.closest('li').classList.add('editing');
+            target.closest('li').classList.add(TODO_BUTTONS.EDITING);
             target
                 .closest('li')
                 .addEventListener('keyup', this.editTodoItem.bind(this, originValue));

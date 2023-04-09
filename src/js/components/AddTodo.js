@@ -1,6 +1,5 @@
 export default class AddTodo {
-    constructor(store, $newTodoTitle, viewTodo) {
-        this.store = store;
+    constructor($newTodoTitle, viewTodo) {
         this.$newTodoTitle = $newTodoTitle;
         this.viewTodo = viewTodo;
         this.mount();
@@ -10,14 +9,15 @@ export default class AddTodo {
     }
     addTodo = ({ target, key }) => {
         if (key === 'Enter' && target.value) {
-            const todos = this.store.getTodos();
-            todos.push({
+            // Nullish coalescing operator (??) 사용
+            this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+            this.todos.push({
                 id: String(Date.now()),
                 title: target.value,
                 completed: false,
             });
             target.value = '';
-            this.store.setTodos(todos);
+            localStorage.setItem('todos', JSON.stringify(this.todos));
             this.viewTodo.render();
         }
     }

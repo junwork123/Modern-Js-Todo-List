@@ -1,5 +1,6 @@
 export default class ChangeTodo {
-    constructor($todoList, viewTodo) {
+    constructor(store, $todoList, viewTodo) {
+        this.store = store;
         this.$todoList = $todoList;
         this.viewTodo = viewTodo;
         this.mount();
@@ -10,7 +11,7 @@ export default class ChangeTodo {
     }
 
     changeTodo = ({ target }) => {
-        this.$todos = JSON.parse(localStorage.getItem('todos'));
+        this.todos = this.store.getTodos();
         if(target.classList.contains('toggle')){
            return this.toggleTodo(target);
         }
@@ -20,18 +21,18 @@ export default class ChangeTodo {
     }
 
     toggleTodo = (target) => {
-        this.$todos.map((todo) => {
+        this.todos.map((todo) => {
            if(todo.id === target.id){
                todo.completed = !todo.completed;
            }
         });
-        localStorage.setItem('todos', JSON.stringify(this.$todos));
+        this.store.setTodos(this.$todos);
         this.viewTodo.render();
     }
 
     removeTodo = (target) => {
-        this.$todos = this.$todos.filter((todo) => todo.id !== target.id);
-        localStorage.setItem('todos', JSON.stringify(this.$todos));
+        this.todos = this.todos.filter((todo) => todo.id !== target.id);
+        this.store.setTodos(this.todos);
         this.viewTodo.render();
     }
 }

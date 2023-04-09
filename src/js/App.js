@@ -6,15 +6,15 @@ import EditTodo from "./components/EditTodo.js";
 import FilterTodo from "./components/FilterTodo.js";
 
 export default class App {
-    constructor() {
+    constructor(store) {
         this.$todoList = $('.todo-list');
         this.$todoCount = $('.todo-count strong');
         this.$filters = $('.filters');
         this.$newTodoTitle = $('.new-todo');
-        this.viewTodo = new ViewTodo(this.$todoList, this.$todoCount);
-        this.addTodo = new AddTodo(this.$newTodoTitle, this.viewTodo);
-        this.changeTodo = new ChangeTodo(this.$todoList, this.viewTodo);
-        this.editTodo = new EditTodo(this.$todoList, this.viewTodo);
+        this.viewTodo = new ViewTodo(store, this.$todoList, this.$todoCount);
+        this.addTodo = new AddTodo(store, this.$newTodoTitle, this.viewTodo);
+        this.changeTodo = new ChangeTodo(store, this.$todoList, this.viewTodo);
+        this.editTodo = new EditTodo(store, this.$todoList, this.viewTodo);
         this.filterTodo = new FilterTodo(this.$filters, this.viewTodo);
     }
 }

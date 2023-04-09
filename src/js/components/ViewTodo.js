@@ -1,7 +1,8 @@
 import { ALL, ACTIVE, COMPLETED } from "../contant/TodoStatus.js";
 
 export default class ViewTodo {
-    constructor( $todoList, $todoCount ) {
+    constructor( store, $todoList, $todoCount ) {
+        this.store = store;
         this.$todoList = $todoList;
         this.$todoCount = $todoCount;
         this.todos = [];
@@ -49,9 +50,12 @@ export default class ViewTodo {
     }
 
     render = (filter = ALL) => {
-        this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+        if( filter !== ALL ) {
+            this.filter = filter;
+        }
+        this.todos = this.store.getTodos();
         this.$todoList.innerHTML = '';
-        this.renderFilteredTodoList(filter);
+        this.renderFilteredTodoList(this.filter);
         this.$todoCount.innerHTML = this.$todoList.querySelectorAll('li').length;
     }
 }

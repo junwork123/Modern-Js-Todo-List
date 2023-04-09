@@ -1,8 +1,7 @@
 <p align="middle" >
   <img width="200px;" src="src/images/check_list.png"/>
 </p>
-<h2 align="middle">JS 투두리스트 스텝1</h2>
-<p align="middle">자바스크립트로 구현 하는 투두리스트</p>
+<h2 align="middle">Modern JS Todo List</h2>
 <p align="middle">
   <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="template version"/>
   <img src="https://img.shields.io/badge/language-html-red.svg?style=flat-square"/>

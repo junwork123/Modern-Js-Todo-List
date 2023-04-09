@@ -38,9 +38,7 @@ export default class EditTodo {
             target.closest('li').classList.add('editing');
             target
                 .closest('li')
-                .addEventListener('keyup', ({ target, key }) =>
-                    this.editTodoItem({ target, key }, originValue),
-                );
+                .addEventListener('keyup', this.editTodoItem.bind(this, originValue));
         }
     }
 }

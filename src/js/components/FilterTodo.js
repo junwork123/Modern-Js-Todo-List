@@ -11,11 +11,14 @@ export default class FilterTodo {
     }
 
     filterTodo = ({ target }) => {
-        let filter = ALL;
-        if (target.classList.contains(ACTIVE)){ filter = ACTIVE; }
-        if (target.classList.contains(COMPLETED)){ filter = COMPLETED; }
         this.$filters.querySelector('.selected').classList.remove('selected');
         target.classList.add('selected');
-        this.viewTodo.render(filter);
+        this.viewTodo.render(this.getFilter(target));
     };
+
+    getFilter = (target) => {
+        if (target.classList.contains(ACTIVE)){ return ACTIVE; }
+        if (target.classList.contains(COMPLETED)){ return COMPLETED; }
+        return ALL;
+    }
 }

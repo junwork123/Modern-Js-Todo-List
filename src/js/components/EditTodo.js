@@ -1,5 +1,5 @@
 import { TODO_BUTTONS } from "../utils/constants.js";
-
+import { getTodos, setTodos } from "../utils/store.js";
 export default class EditTodo {
     constructor($todoList, viewTodo) {
         this.$todoList = $todoList;
@@ -28,13 +28,13 @@ export default class EditTodo {
             if (todo.id === updateId) {
                 todo.title = value;
             }
-            localStorage.setItem('todos', JSON.stringify(this.todos));
+            setTodos(this.todos);
             this.viewTodo.render();
         });
     }
 
     editTodo = ({ target }) => {
-        this.todos = JSON.parse(localStorage.getItem('todos'));
+        this.todos = getTodos();
         if(target.className === TODO_BUTTONS.LABEL){
             const originValue = target.innerText;
             target.closest('li').classList.add(TODO_BUTTONS.EDITING);

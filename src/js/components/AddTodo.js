@@ -1,3 +1,5 @@
+import { getTodos, setTodos } from "../utils/store.js";
+
 export default class AddTodo {
     constructor($newTodoTitle, viewTodo) {
         this.$newTodoTitle = $newTodoTitle;
@@ -10,14 +12,14 @@ export default class AddTodo {
     addTodo = ({ target, key }) => {
         if (key === 'Enter' && target.value) {
             // Nullish coalescing operator (??) 사용
-            this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+            this.todos = getTodos();
             this.todos.push({
                 id: String(Date.now()),
                 title: target.value,
                 completed: false,
             });
             target.value = '';
-            localStorage.setItem('todos', JSON.stringify(this.todos));
+            setTodos(this.todos);
             this.viewTodo.render();
         }
     }

@@ -1,5 +1,5 @@
 import { FILTER_TYPE, TODO_BUTTONS } from "../utils/constants.js";
-
+import { getTodos } from "../utils/store.js";
 export default class ViewTodo {
     constructor( $todoList, $todoCount ) {
         this.$todoList = $todoList;
@@ -49,7 +49,7 @@ export default class ViewTodo {
     }
 
     render = (filter = FILTER_TYPE.ALL) => {
-        this.todos = JSON.parse(localStorage.getItem('todos')) ?? [];
+        this.todos = getTodos();
         this.$todoList.innerHTML = '';
         this.renderFilteredTodoList(filter);
         this.$todoCount.innerHTML = this.$todoList.querySelectorAll('li').length;

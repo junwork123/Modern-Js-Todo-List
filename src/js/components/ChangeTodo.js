@@ -1,5 +1,5 @@
 import { TODO_BUTTONS } from "../utils/constants.js";
-
+import { getTodos, setTodos } from "../utils/store.js";
 export default class ChangeTodo {
     constructor($todoList, viewTodo) {
         this.$todoList = $todoList;
@@ -12,7 +12,7 @@ export default class ChangeTodo {
     }
 
     changeTodo = ({ target }) => {
-        this.$todos = JSON.parse(localStorage.getItem('todos'));
+        this.$todos = getTodos();
         if(target.classList.contains(TODO_BUTTONS.TOGGLE)){
            return this.toggleTodo(target);
         }
@@ -27,13 +27,13 @@ export default class ChangeTodo {
                todo.completed = !todo.completed;
            }
         });
-        localStorage.setItem('todos', JSON.stringify(this.$todos));
+        setTodos(this.$todos)
         this.viewTodo.render();
     }
 
     removeTodo = (target) => {
         this.$todos = this.$todos.filter((todo) => todo.id !== target.id);
-        localStorage.setItem('todos', JSON.stringify(this.$todos));
+        setTodos(this.$todos);
         this.viewTodo.render();
     }
 }

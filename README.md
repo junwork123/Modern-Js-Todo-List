@@ -7,66 +7,231 @@
   <img src="https://img.shields.io/badge/language-html-red.svg?style=flat-square"/>
   <img src="https://img.shields.io/badge/language-css-blue.svg?style=flat-square"/>
   <img src="https://img.shields.io/badge/language-js-yellow.svg?style=flat-square"/>
-  <a href="https://github.com/next-step/js-todo-list-step1/blob/main/LICENSE" target="_blank">
-    <img src="https://img.shields.io/github/license/next-step/js-todo-list-step1.svg?style=flat-square&label=license&color=08CE5D"/>
+  <a href="https://github.com/next-step/js-todo-list-step2/blob/main/LICENSE" target="_blank">
+    <img src="https://img.shields.io/github/license/next-step/js-todo-list-step2.svg?style=flat-square&label=license&color=08CE5D"/>
   </a>
 </p>
 
 ## 🔥 Projects!
 
 <p align="middle">
-  <img width="400" src="src/images/sample.gif">
+  <img width="400" src="./src/images/sample.png">
 </p>
 
 <p align="middle">
-  <a href="https://next-step.github.io/js-todo-list-step1/">🖥️ 데모 링크</a>
+  <a href="https://next-step.github.io/js-todo-list-step2/">🖥️ 데모 링크</a>
 </p>
 
 <br/>
 
 ## 🎯 요구사항
 
-- [ ] todo list에 todoItem을 키보드로 입력하여 추가하기
-- [ ] todo list의 체크박스를 클릭하여 complete 상태로 변경 (li tag 에 completed class 추가, input 태그에 checked 속성 추가)
-- [ ] todo list의 x버튼을 이용해서 해당 엘리먼트를 삭제
-- [ ] todo list를 더블클릭했을 때 input 모드로 변경 (li tag 에 editing class 추가) 단 이때 수정을 완료하지 않은 상태에서 esc키를 누르면 수정되지 않은 채로 다시 view 모드로 복귀
-- [ ] todo list의 item갯수를 count한 갯수를 리스트의 하단에 보여주기
-- [ ] todo list의 상태값을 확인하여, 해야할 일과, 완료한 일을 클릭하면 해당 상태의 아이템만 보여주기
-
-## 🎯🎯 심화 요구사항
-- [ ] localStorage에 데이터를 저장하여, TodoItem의 CRUD를 반영하기. 따라서 새로고침하여도 저장된 데이터를 확인할 수 있어야 함
+- [ ] 1. User 추가하기
+- [ ] 2. User의 투두리스트 불러오기
+- [ ] 3. User 삭제하기
+- [ ] 3. todoItem 추가하기
+- [ ] 4. todoItem 불러오기
+- [ ] 5. todoItem complete하기
+- [ ] 6. todoItem 삭제하기
+- [ ] 7. todoItem contents 내용 수정하기
 
 <br/>
 
-## 🔔 참고사항
-`TodoItem`을 추가할 시 아래 템플릿을 활용하면 됩니다.
-```html
-<ul id="todo-list" class="todo-list">
-  <li>
-    <div class="view">
-      <input class="toggle" type="checkbox"/>
-      <label class="label">새로운 타이틀</label>
-      <button class="destroy"></button>
-    </div>
-    <input class="edit" value="새로운 타이틀" />
-  </li>
-  <li class="editing">
-    <div class="view">
-      <input class="toggle" type="checkbox" />
-      <label class="label">완료된 타이틀</label>
-      <button class="destroy"></button>
-    </div>
-    <input class="edit" value="완료된 타이틀" />
-  </li>
-  <li class="completed">
-    <div class="view">
-      <input class="toggle" type="checkbox" checked/>
-      <label class="label">완료된 타이틀</label>
-      <button class="destroy"></button>
-    </div>
-    <input class="edit" value="완료된 타이틀" />
-  </li>
-</ul>
+## 🎯🎯 심화 요구사항
+
+- [ ] 1. fetch api 사용하는 부분을 async await을 사용하여 리팩토링하기.
+- [ ] 2. github issue에서 라벨을 붙이는 것처럼, 우선순위에 따라서 label를 추가하기.
+- [ ] 3. ES6 impot & export를 이용해 자바스크립트 파일을 리팩토링하기.
+
+<br/>
+
+## 🕵️‍♂️ 제약사항
+
+- [ ] 1. User의 이름은 최소 2글자 이상이어야 한다.
+- [ ] 2. TodoItem Contents는 최소 2글자 이상이어야 한다.
+
+<br/>
+
+## 📝 API
+
+### User list 불러오기
+
+| method | uri        |
+| ------ | ---------- |
+| GET    | /api/users |
+
+```javascript
+{
+ response: [...]
+}
+```
+
+### User 추가하기
+
+| method | uri        |
+| ------ | ---------- |
+| POST   | /api/users |
+
+```javascript
+{
+ requestBody: {
+   "name": "string"
+ },
+ response: {
+   "_id": "string",
+   "name": "string",
+   "todoList": []
+  }
+}
+```
+
+### User 불러오기
+
+| method | uri                |
+| ------ | ------------------ |
+| GET    | /api/users/:userId |
+
+```javascript
+{
+ response: {
+   "_id": "string",
+   "name": "string",
+   "todoList": [...]
+  }
+}
+```
+
+### User 삭제하기
+
+| method | uri                |
+| ------ | ------------------ |
+| DELETE | /api/users/:userId |
+
+```javascript
+{
+  response: {
+  }
+}
+```
+
+### User의 Todo Item 불러오기
+
+| method | uri                       |
+| ------ | ------------------------- |
+| GET    | /api/users/:userId/items/ |
+
+```javascript
+{
+ response: [...]
+}
+```
+
+### User의 Todo Item 추가하기
+
+| method | uri                       |
+| ------ | ------------------------- |
+| POST   | /api/users/:userId/items/ |
+
+```javascript
+{
+ requestBody: {
+   "contents": "string"
+ },
+ response: {
+   "_id": "string",
+   "name": "string",
+   "todoList": [...]
+  }
+}
+```
+
+### User의 Todo Item 전부 삭제하기
+
+| method | uri                       |
+| ------ | ------------------------- |
+| DELETE | /api/users/:userId/items/ |
+
+```javascript
+{
+ response: {
+   "_id": "string",
+   "name": "string",
+   "todoList": []
+  }
+}
+```
+
+### User의 Todo Item 1개 삭제하기
+
+| method | uri                              |
+| ------ | -------------------------------- |
+| DELETE | /api/users/:userId/items/:itemId |
+
+```javascript
+{
+ response: {
+   "_id": "string",
+   "name": "string",
+   "todoList": [...]
+  }
+}
+```
+
+### User의 Todo Item 내용 수정하기
+
+| method | uri                              |
+| ------ | -------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId |
+
+```javascript
+{
+ requestBody: {
+   "contents": "string"
+ },
+ response: {
+  "_id": "string",
+   "contents": "string",
+   "priority": "string",
+   "isCompleted": "boolean"
+  }
+}
+```
+
+### User의 Todo Item 우선순위 수정하기
+
+| method | uri                                       |
+| ------ | ----------------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId/priority |
+
+```javascript
+{
+ requestBody: {
+   "priority": "string" // 'NONE', 'FIRST', 'SECOND'
+ },
+ response: {
+   "_id": "string",
+   "contents": "string",
+   "priority": "string",
+   "isCompleted": "boolean"
+  }
+}
+```
+
+### User의 Todo Item complete toggle
+
+| method | uri                                     |
+| ------ | --------------------------------------- |
+| PUT    | /api/users/:userId/items/:itemId/toggle |
+
+```javascript
+{
+ response: {
+   "_id": "string",
+   "contents": "string",
+   "priority": "string",
+   "isCompleted": "boolean"
+  }
+}
 ```
 
 <br/>
@@ -98,4 +263,4 @@ Set-ExecutionPolicy Unrestricted
 
 ## 📝 License
 
-This project is [MIT](https://github.com/next-step/js-todo-list-step1/blob/main/LICENSE) licensed.
+This project is [MIT](https://github.com/next-step/js-todo-list-step2/blob/main/LICENSE) licensed.

@@ -1,10 +1,10 @@
-const FILTER_TYPE = Object.freeze({
+export const FILTER_TYPE = Object.freeze({
     ALL: 'all',
     ACTIVE: 'active',
     COMPLETED: 'completed'
 });
 
-const TODO_BUTTONS = Object.freeze({
+export const TODO_BUTTONS = Object.freeze({
     TOGGLE: 'toggle',
     LABEL: 'label',
     DESTROY: 'destroy',
@@ -14,4 +14,8 @@ const TODO_BUTTONS = Object.freeze({
     SELECTED: 'selected',
 });
 
-export { FILTER_TYPE, TODO_BUTTONS };
+export const TODO_EVENTS = Object.freeze({
+    ADD_TODO: 'addTodo',
+    EDIT_TODO: 'editTodo',
+    SET_FILTER: 'setFilter',
+});

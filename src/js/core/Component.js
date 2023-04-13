@@ -47,16 +47,4 @@ export default class Component{
             });
         */
     }
-    setState = (newState) => {
-        // 컴포넌트의 상태를 변경한다.
-        this.$state = {...this.$state, ...newState};
-        this.render();
-    }
-    addEvent (eventType, selector, callback) {
-        // 컴포넌트의 이벤트를 등록한다.
-        this.$target.addEventListener(eventType, event => {
-            if(!event.target.closest(selector)) return false;
-            callback(event);
-        });
-    }
 }

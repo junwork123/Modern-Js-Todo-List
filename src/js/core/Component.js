@@ -1,3 +1,5 @@
+import { observable, observe } from "./observer.js";
+
 export default class Component{
     $target;
     $props; // 부모 컴포넌트가 자식 컴포넌트에게 상태 혹은 메소드를 넘겨주기 위해서
@@ -6,13 +8,18 @@ export default class Component{
         this.$target = $target;
         this.$props = $props;
         this.setUp();
-        this.setEvent();
-        this.mounted();
     }
     setUp () {
         // 컴포넌트가 마운트되기 전에 호출
         // 컴포넌트를 초기화하는데 사용한다.
+        this.$state = observable(this.initState());
+        observe(() => {
+            this.render();
+            this.setEvent();
+            this.mounted();
+        });
     }
+    initState () { return {}; }
     mounted () {
         // 컴포넌트가 마운트된 후에 동작한다.
     }

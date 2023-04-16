@@ -8,10 +8,10 @@ const debounceFrame = (callback, delay = -1) => {
         currentCallback = requestAnimationFrame(callback);
     }
 }
-export const observe = observer => {
+export const observe = notify => {
     // 현재 옵저버를 등록한다.
-    currentObserver = debounceFrame(observer);
-    observer();
+    currentObserver = debounceFrame(notify);
+    notify();
     currentObserver = null;
 }
 export const observable = obj => {
@@ -33,7 +33,7 @@ export const observable = obj => {
 
             // 값이 변경되면 옵저버를 실행한다.
             target[key] = value;
-            observerMap[key].forEach(observer => observer());
+            observerMap[key].forEach(notify => notify());
             return true;
         }
     });

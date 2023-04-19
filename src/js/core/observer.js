@@ -15,10 +15,11 @@ export const observe = notify => {
     currentObserver = null;
 }
 export const observable = obj => {
-    const observerMap = Object.keys(obj).reduce((map, key) => {
-       map[key] = new Set();
-       return map;
-    });
+    const observerMap = obj ? Object.keys(obj).reduce((map, key) => {
+        map[key] = new Set();
+        return map;
+    }, {}) : {};
+
 
     return new Proxy(obj, {
         get: (target, key) => {

@@ -1,6 +1,5 @@
-import { createStore } from "../core/Store.js";
-import userReducer from "./user/userReducer.js";
+import reducer from "./reducer.js";
+import {createStore} from "../core/createStore.js";
+const store = createStore(reducer);
 
-const userStore = createStore(userReducer);
-
-export { userStore }
+export { store };

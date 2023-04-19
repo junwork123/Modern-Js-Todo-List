@@ -1,5 +1,5 @@
-import Component from "../core/Component";
-import { userStore } from "../store";
+import Component from "../core/Component.js";
+import {store} from "../store/index.js";
 const UserListItem = (user) => {
     return `
         <button class='ripple'
@@ -14,7 +14,7 @@ export default class UserList extends Component {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template () {
-        const { users } = userStore.getState();
+        const { users } = store.getState();
         return `
             <div id="user-list">
                 ${ users && users.map( (user) => 

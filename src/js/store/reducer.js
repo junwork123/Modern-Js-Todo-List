@@ -1,4 +1,4 @@
-import { GET_USERS } from "./user/actions.js";
+import { GET_USERS, CREATE_USER } from "./user/actions.js";
 
 
 let initialState = {
@@ -6,11 +6,15 @@ let initialState = {
 }
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
-        // USER REDUCER
         case GET_USERS:
             return {
                 ...state,
                 ...action.payload,
+            }
+        case CREATE_USER:
+            return {
+                ...state,
+                users: [...state.users, action.payload],
             }
         default:
             return state;

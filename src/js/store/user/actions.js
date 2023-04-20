@@ -1,0 +1,7 @@
+const GET_USERS = 'GET_USERS'
+const CREATE_USER = 'CREATE_USER'
+
+export {
+    GET_USERS,
+    CREATE_USER,
+}

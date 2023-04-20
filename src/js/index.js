@@ -1,2 +1,2 @@
-import App from "./App.js";
-new App();
+import TodoApp from "./TodoApp.js";
+new TodoApp('#app');

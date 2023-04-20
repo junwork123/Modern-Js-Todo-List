@@ -32,7 +32,7 @@ export default class UserList extends Component {
         `
     }
     setEvent () {
-        this.addEvent('click', '.user-create-button', () => {
+        this.addEvent('click', '.user-create-button', (event) => {
             const userName = prompt('추가하고 싶은 이름을 입력해주세요')
 
             if (!userName) {
@@ -44,6 +44,7 @@ export default class UserList extends Component {
             }
 
             this.createUser(userName);
+            event.stopImmediatePropagation();
         });
 
         this.addEvent('click', '.user-delete-button', () => {

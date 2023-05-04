@@ -25,13 +25,12 @@ export default class TodoList extends Component {
         const { todos } = store.getState();
 
         // 컴포넌트의 내용을 반환
+        // join을 하지 않으면 ','까지 같이 출력된다
         return `
             <ul class="todo-list">
-                ${ todos && todos.map( (todo) =>
-                    TodoItem(todo)
-                )}
+                ${ todos && todos.map((todo) => TodoItem(todo)).join('')}
             </ul>
-        `
+        `;
     }
 
     setEvent () {

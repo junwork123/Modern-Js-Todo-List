@@ -40,13 +40,13 @@ export default class TodoList extends Component {
     }
     clickDeleteButton() {
         this.addEvent('click', '.destroy', (event) => {
-            this.deleteTodoItem(event.target);
+            const itemId = event.target.closest('li').dataset.id;
+            this.deleteTodoItem(itemId);
             event.stopImmediatePropagation();
         })
     }
-    deleteTodoItem(target) {
+    deleteTodoItem(itemId) {
         if(!confirm('정말 삭제하시겠습니까?')) { return; }
-        const itemId = target.closest('li').dataset.id
         store.dispatch(deleteTodo(itemId));
     }
 

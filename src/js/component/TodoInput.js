@@ -27,7 +27,6 @@ export default class TodoInput extends Component {
       if (event.key === "Enter" && content) {
         this.createTodoItem(content);
         event.target.value = "";
-        event.stopImmediatePropagation();
       }
     });
   }

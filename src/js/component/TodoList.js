@@ -1,6 +1,7 @@
 import Component from "../core/Component.js";
 import {store} from "../store/index.js";
 import {deleteTodo} from "../store/todo/creator.js";
+import {TODO_STATUS} from "../utils/constants.js";
 
 const TodoItem = (todo) => {
     const { id, content, completed } = todo;
@@ -13,6 +14,7 @@ const TodoItem = (todo) => {
                 </label>
                 <button class="destroy"></button>
             </div>
+            <input class="edit" value=${content} />
         </li>
     `;
 }
@@ -35,24 +37,27 @@ export default class TodoList extends Component {
     }
 
     setEvent () {
-        this.clickDeleteButton();
-        this.editTodoItem();
+        this.onClickDeleteButton();
+        this.onDoubleClickTodoItem();
     }
-    clickDeleteButton() {
+    onClickDeleteButton() {
         this.addEvent('click', '.destroy', (event) => {
-            const itemId = event.target.closest('li').dataset.id;
-            this.deleteTodoItem(itemId);
+            if(!confirm('정말 삭제하시겠습니까?')) { return; }
+
+            const todoItem = this.getTargetTodoItem(event);
+            this.deleteTodoItem(todoItem);
+
             event.stopImmediatePropagation();
         })
     }
-    deleteTodoItem(itemId) {
-        if(!confirm('정말 삭제하시겠습니까?')) { return; }
-        store.dispatch(deleteTodo(itemId));
-    }
-
-    editTodoItem() {
-        this.addEvent('dblclick', '', (event) => {
-
+    deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
+    onDoubleClickTodoItem() {
+        this.addEvent('dblclick', 'li', (event) => {
+            const todoItem = this.getTargetTodoItem(event);
+            todoItem.classList.add(TODO_STATUS.EDITING);
         })
+    }
+    getTargetTodoItem(event) {
+        return event.target.closest('li');
     }
 }

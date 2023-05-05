@@ -33,6 +33,11 @@ export default class TodoInput extends Component {
   }
 
   createTodoItem(content) {
-    store.dispatch(createTodo(content));
+    const newTodoItem = {
+      id: String(Date.now()),
+      content: content,
+      completed: false
+    };
+    store.dispatch(createTodo(newTodoItem));
   }
 }

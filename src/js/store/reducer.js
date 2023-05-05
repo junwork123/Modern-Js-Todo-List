@@ -39,7 +39,7 @@ const reducer = (state = initialState, action = {}) => {
         case CREATE_TODO:
             return {
                 ...state,
-                todos: [...state.todos, action.payload],
+                todos: [...state.todos, action.payload.todo],
             }
         case DELETE_TODO:
             return {

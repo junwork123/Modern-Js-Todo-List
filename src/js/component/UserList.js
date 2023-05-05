@@ -32,26 +32,11 @@ export default class UserList extends Component {
         `
     }
     setEvent () {
-        this.addEvent('click', '.user-create-button', (event) => {
-            const userName = prompt('추가하고 싶은 이름을 입력해주세요')
+        this.clickCreateButton();
+        this.clickDeleteButton();
+    }
 
-            if (!userName) {
-                alert('이름을 반드시 입력해야 합니다.');
-                return false;
-            }
-            if (userName.length < 2) { // 제시된 제약조건
-                alert('사용자 이름은 2글자 이상이어야 합니다.');
-                return false;
-            }
-            if(this.isUserExist(userName)){
-                alert('이미 존재하는 이름입니다.');
-                return false;
-            }
-
-            this.createUser(userName);
-            event.stopImmediatePropagation();
-        });
-
+    clickDeleteButton() {
         this.addEvent('click', '.user-delete-button', (event) => {
             const userName = prompt('삭제하고 싶은 이름을 입력해주세요')
 
@@ -63,7 +48,7 @@ export default class UserList extends Component {
                 alert('사용자 이름은 2글자 이상이어야 합니다.');
                 return false;
             }
-            if(this.isUserNotExist(userName)){
+            if (this.isUserNotExist(userName)) {
                 alert('존재하지 않는 이름입니다.');
                 return false;
             }
@@ -72,6 +57,29 @@ export default class UserList extends Component {
             event.stopImmediatePropagation();
         });
     }
+
+    clickCreateButton() {
+        this.addEvent('click', '.user-create-button', (event) => {
+            const userName = prompt('추가하고 싶은 이름을 입력해주세요')
+
+            if (!userName) {
+                alert('이름을 반드시 입력해야 합니다.');
+                return false;
+            }
+            if (userName.length < 2) { // 제시된 제약조건
+                alert('사용자 이름은 2글자 이상이어야 합니다.');
+                return false;
+            }
+            if (this.isUserExist(userName)) {
+                alert('이미 존재하는 이름입니다.');
+                return false;
+            }
+
+            this.createUser(userName);
+            event.stopImmediatePropagation();
+        });
+    }
+
     getUsers() {
         return store.getState();
     }

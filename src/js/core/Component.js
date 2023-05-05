@@ -37,6 +37,7 @@ export default class Component{
         this.$target.addEventListener(eventType, event => {
             if(!event.target.closest(selector)) { return false; }
             callback(event);
+            event.stopImmediatePropagation();
         });
     }
 

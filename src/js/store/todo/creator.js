@@ -2,6 +2,7 @@ import {
     GET_TODOS,
     CREATE_TODO,
     DELETE_TODO,
+    UPDATE_TODO_CONTENT,
 } from './actions.js'
 
 const getTodos = (todos) => {
@@ -30,4 +31,14 @@ const deleteTodo = (id) => {
         },
     }
 }
-export { getTodos, createTodo, deleteTodo }
+
+const updateTodoContent = (id, content) => {
+    return {
+        type: UPDATE_TODO_CONTENT,
+        payload: {
+            id,
+            content,
+        },
+    }
+}
+export { getTodos, createTodo, deleteTodo, updateTodoContent }

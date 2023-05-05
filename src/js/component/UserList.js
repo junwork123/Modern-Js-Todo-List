@@ -54,7 +54,6 @@ export default class UserList extends Component {
             }
 
             this.deleteUser(userName);
-            event.stopImmediatePropagation();
         });
     }
 
@@ -76,7 +75,6 @@ export default class UserList extends Component {
             }
 
             this.createUser(userName);
-            event.stopImmediatePropagation();
         });
     }
 

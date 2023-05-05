@@ -1,6 +1,7 @@
 import Component from "../core/Component.js";
 import {store} from "../store/index.js";
-import {deleteTodo} from "../store/todo/creator.js";
+import {deleteTodo, updateTodoContent,} from "../store/todo/creator.js";
+import {TODO_STATUS} from "../utils/constants.js";
 
 const TodoItem = (todo) => {
     const { id, content, completed } = todo;
@@ -13,6 +14,7 @@ const TodoItem = (todo) => {
                 </label>
                 <button class="destroy"></button>
             </div>
+            <input class="edit" value=${content} data-origin=${content} />
         </li>
     `;
 }
@@ -35,24 +37,50 @@ export default class TodoList extends Component {
     }
 
     setEvent () {
-        this.clickDeleteButton();
-        this.editTodoItem();
+        this.onClickDeleteButton();
+        this.onDoubleClickTodoItem();
+        this.onEditTodoItem();
     }
-    clickDeleteButton() {
+    onClickDeleteButton() {
         this.addEvent('click', '.destroy', (event) => {
-            const itemId = event.target.closest('li').dataset.id;
-            this.deleteTodoItem(itemId);
-            event.stopImmediatePropagation();
+            if(!confirm('정말 삭제하시겠습니까?')) { return; }
+
+            const todoItem = this.getTargetTodoItem(event);
+            this.deleteTodoItem(todoItem);
         })
     }
-    deleteTodoItem(itemId) {
-        if(!confirm('정말 삭제하시겠습니까?')) { return; }
-        store.dispatch(deleteTodo(itemId));
+    onDoubleClickTodoItem() {
+        this.addEvent('dblclick', 'li', (event) => {
+            const todoItem = this.getTargetTodoItem(event);
+            todoItem.classList.add(TODO_STATUS.EDITING);
+        })
+    }
+    onEditTodoItem() {
+        this.addEvent('keydown', '.edit', (event) => {
+            const todoItem = this.getTargetTodoItem(event);
+            const editingTodoItem = event.target;
+            const originValue = editingTodoItem.dataset.origin;
+
+            switch (event.key) {
+                case 'Escape':
+                    editingTodoItem.value = originValue;
+                    todoItem.classList.remove(TODO_STATUS.EDITING);
+                    break;
+                case 'Enter':
+                    this.updateTodoContent(todoItem, editingTodoItem.value);
+                    todoItem.classList.remove(TODO_STATUS.EDITING);
+                    this.render();
+                    break;
+            }
+        });
+    }
+    deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
+    updateTodoContent(todoItem, newContent) {
+        if(!newContent) { return; }
+        store.dispatch(updateTodoContent(todoItem.dataset.id, newContent));
     }
 
-    editTodoItem() {
-        this.addEvent('dblclick', '', (event) => {
-
-        })
+    getTargetTodoItem(event) {
+        return event.target.closest('li');
     }
 }

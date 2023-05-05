@@ -1,5 +1,6 @@
 import Component from "../core/Component.js";
 import {store} from "../store/index.js";
+import {deleteTodo} from "../store/todo/creator.js";
 
 const TodoItem = (todo) => {
     const { id, content, completed } = todo;
@@ -28,12 +29,30 @@ export default class TodoList extends Component {
         // join을 하지 않으면 ','까지 같이 출력된다
         return `
             <ul class="todo-list">
-                ${ todos && todos.map((todo) => TodoItem(todo)).join('')}
+                ${ todos && todos.map((todo) => TodoItem(todo)).join('') }
             </ul>
         `;
     }
 
     setEvent () {
+        this.clickDeleteButton();
+        this.editTodoItem();
+    }
+    clickDeleteButton() {
+        this.addEvent('click', '.destroy', (event) => {
+            const itemId = event.target.closest('li').dataset.id;
+            this.deleteTodoItem(itemId);
+            event.stopImmediatePropagation();
+        })
+    }
+    deleteTodoItem(itemId) {
+        if(!confirm('정말 삭제하시겠습니까?')) { return; }
+        store.dispatch(deleteTodo(itemId));
+    }
 
+    editTodoItem() {
+        this.addEvent('dblclick', '', (event) => {
+
+        })
     }
 }

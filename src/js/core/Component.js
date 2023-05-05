@@ -35,7 +35,7 @@ export default class Component{
     addEvent (eventType, selector, callback) {
         // 컴포넌트의 이벤트를 추가한다.
         this.$target.addEventListener(eventType, event => {
-            if(!event.target.closest(selector)) return false;
+            if(!event.target.closest(selector)) { return false; }
             callback(event);
         });
     }

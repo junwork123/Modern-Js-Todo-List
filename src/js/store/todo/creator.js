@@ -13,13 +13,11 @@ const getTodos = (todos) => {
     }
 }
 
-const createTodo = (content) => {
+const createTodo = (todo) => {
     return {
         type: CREATE_TODO,
         payload: {
-            id: String(Date.now()),
-            content: content,
-            completed: false
+            todo
         },
     }
 }

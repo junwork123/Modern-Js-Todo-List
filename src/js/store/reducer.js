@@ -8,6 +8,7 @@ import {
     GET_TODOS,
     CREATE_TODO,
     DELETE_TODO,
+    UPDATE_TODO_CONTENT,
 } from "./todo/actions.js";
 
 let initialState = {
@@ -45,6 +46,16 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 todos: state.todos.filter(todo => todo.id !== action.payload.id),
+            }
+        case UPDATE_TODO_CONTENT:
+            return {
+                ...state,
+                todos: state.todos.map(todo => {
+                    if (todo.id === action.payload.id) {
+                        todo.content = action.payload.content;
+                    }
+                    return todo;
+                })
             }
         default:
             return state;

@@ -1,6 +1,6 @@
 import Component from "../core/Component.js";
 import {store} from "../store/index.js";
-import {deleteTodo} from "../store/todo/creator.js";
+import {deleteTodo, updateTodoContent,} from "../store/todo/creator.js";
 import {TODO_STATUS} from "../utils/constants.js";
 
 const TodoItem = (todo) => {
@@ -14,7 +14,7 @@ const TodoItem = (todo) => {
                 </label>
                 <button class="destroy"></button>
             </div>
-            <input class="edit" value=${content} />
+            <input class="edit" value=${content} data-origin=${content} />
         </li>
     `;
 }
@@ -39,6 +39,7 @@ export default class TodoList extends Component {
     setEvent () {
         this.onClickDeleteButton();
         this.onDoubleClickTodoItem();
+        this.onEditTodoItem();
     }
     onClickDeleteButton() {
         this.addEvent('click', '.destroy', (event) => {
@@ -46,17 +47,39 @@ export default class TodoList extends Component {
 
             const todoItem = this.getTargetTodoItem(event);
             this.deleteTodoItem(todoItem);
-
-            event.stopImmediatePropagation();
         })
     }
-    deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
     onDoubleClickTodoItem() {
         this.addEvent('dblclick', 'li', (event) => {
             const todoItem = this.getTargetTodoItem(event);
             todoItem.classList.add(TODO_STATUS.EDITING);
         })
     }
+    onEditTodoItem() {
+        this.addEvent('keydown', '.edit', (event) => {
+            const todoItem = this.getTargetTodoItem(event);
+            const editingTodoItem = event.target;
+            const originValue = editingTodoItem.dataset.origin;
+
+            switch (event.key) {
+                case 'Escape':
+                    editingTodoItem.value = originValue;
+                    todoItem.classList.remove(TODO_STATUS.EDITING);
+                    break;
+                case 'Enter':
+                    this.updateTodoContent(todoItem, editingTodoItem.value);
+                    todoItem.classList.remove(TODO_STATUS.EDITING);
+                    this.render();
+                    break;
+            }
+        });
+    }
+    deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
+    updateTodoContent(todoItem, newContent) {
+        if(!newContent) { return; }
+        store.dispatch(updateTodoContent(todoItem.dataset.id, newContent));
+    }
+
     getTargetTodoItem(event) {
         return event.target.closest('li');
     }

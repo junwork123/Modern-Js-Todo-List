@@ -3,6 +3,7 @@ import {
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
+    TOGGLE_TODO_COMPLETE,
 } from './actions.js'
 
 const getTodos = (todos) => {
@@ -41,4 +42,18 @@ const updateTodoContent = (id, content) => {
         },
     }
 }
-export { getTodos, createTodo, deleteTodo, updateTodoContent }
+const toggleTodoComplete = (id) => {
+    return {
+        type: TOGGLE_TODO_COMPLETE,
+        payload: {
+            id,
+        },
+    }
+}
+export {
+    getTodos,
+    createTodo,
+    deleteTodo,
+    updateTodoContent,
+    toggleTodoComplete,
+}

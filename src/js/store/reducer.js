@@ -9,6 +9,7 @@ import {
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
+    TOGGLE_TODO_COMPLETE,
 } from "./todo/actions.js";
 
 let initialState = {
@@ -53,6 +54,16 @@ const reducer = (state = initialState, action = {}) => {
                 todos: state.todos.map(todo => {
                     if (todo.id === action.payload.id) {
                         todo.content = action.payload.content;
+                    }
+                    return todo;
+                })
+            }
+        case TOGGLE_TODO_COMPLETE:
+            return {
+                ...state,
+                todos: state.todos.map(todo => {
+                    if (todo.id === action.payload.id) {
+                        todo.completed = !todo.completed;
                     }
                     return todo;
                 })

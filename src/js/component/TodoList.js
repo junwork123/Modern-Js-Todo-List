@@ -1,12 +1,12 @@
 import Component from "../core/Component.js";
-import {store} from "../store/index.js";
-import {deleteTodo, updateTodoContent,} from "../store/todo/creator.js";
-import {TODO_STATUS} from "../utils/constants.js";
+import { store } from "../store/index.js";
+import { deleteTodo, updateTodoContent, toggleTodoComplete } from "../store/todo/creator.js";
+import { TODO_STATUS } from "../utils/constants.js";
 
 const TodoItem = (todo) => {
-    const { id, content, completed } = todo;
+    const { id, content, completed, } = todo;
     return `
-        <li data-id="${id}">
+        <li data-id="${id}" class="${completed ? 'completed' : ''}">
             <div class="view">
                 <input class="toggle" type="checkbox" ${completed ? 'checked' : ''} />
                 <label class="label">
@@ -42,6 +42,7 @@ export default class TodoList extends Component {
 
     setEvent () {
         this.onClickDeleteButton();
+        this.onClickCompleteButton();
         this.onDoubleClickTodoItem();
         this.onEditTodoItem();
     }
@@ -51,6 +52,13 @@ export default class TodoList extends Component {
 
             const todoItem = this.getTargetTodoItem(event);
             this.deleteTodoItem(todoItem);
+        })
+    }
+    onClickCompleteButton() {
+        this.addEvent('click', '.toggle', (event) => {
+            const todoItem = this.getTargetTodoItem(event);
+            this.toggleTodoComplete(todoItem);
+            this.render();
         })
     }
     onDoubleClickTodoItem() {
@@ -79,6 +87,7 @@ export default class TodoList extends Component {
         });
     }
     deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
+    toggleTodoComplete(todoItem) { store.dispatch(toggleTodoComplete(todoItem.dataset.id)); }
     updateTodoContent(todoItem, newContent) {
         if(!newContent) { return; }
         store.dispatch(updateTodoContent(todoItem.dataset.id, newContent));

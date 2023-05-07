@@ -19,6 +19,10 @@ const TodoItem = (todo) => {
     `;
 }
 
+const renderTodoList = (todos) => {
+    return todos && todos.map((todo) => TodoItem(todo)).join('');
+}
+
 export default class TodoList extends Component {
     initState () { return {}; }
     mounted () {
@@ -31,7 +35,7 @@ export default class TodoList extends Component {
         // join을 하지 않으면 ','까지 같이 출력된다
         return `
             <ul class="todo-list">
-                ${ todos && todos.map((todo) => TodoItem(todo)).join('') }
+                ${renderTodoList(todos)}
             </ul>
         `;
     }

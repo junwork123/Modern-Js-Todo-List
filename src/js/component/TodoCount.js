@@ -1,6 +1,6 @@
 import Component from "../core/Component.js";
 import { store } from "../store/index.js";
-import { changeFilter, } from "../store/todo/creator.js";
+import { changeFilter, deleteAllTodo } from "../store/todo/creator.js";
 import { FILTER_TYPE } from "../utils/constants.js";
 import { isFilteredTodo } from "../utils/filter.js";
 
@@ -46,6 +46,7 @@ export default class TodoCount extends Component {
 
     setEvent() {
         this.onClickFilter();
+        this.onClickDeleteAllButton();
     }
     onClickFilter() {
         this.addEvent('click', '.filters a', (event) => {
@@ -56,5 +57,12 @@ export default class TodoCount extends Component {
     }
     changeFilter(filter) {
         store.dispatch(changeFilter(filter));
+    }
+
+    onClickDeleteAllButton() {
+        this.addEvent('click', '.clear-completed', (event) => {
+            if(!confirm('정말 삭제하시겠습니까?')) { return; }
+            store.dispatch(deleteAllTodo());
+        })
     }
 }

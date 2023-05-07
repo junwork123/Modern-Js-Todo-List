@@ -9,8 +9,9 @@ import {
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
-    CHANGE_FILTER,
     TOGGLE_TODO_COMPLETE,
+    CHANGE_FILTER,
+    DELETE_ALL_TODO,
 } from "./todo/actions.js";
 import { FILTER_TYPE } from "../utils/constants.js";
 
@@ -75,6 +76,11 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 filter: action.payload.filter,
+            }
+        case DELETE_ALL_TODO:
+            return {
+                ...state,
+                todos: [],
             }
         default:
             return state;

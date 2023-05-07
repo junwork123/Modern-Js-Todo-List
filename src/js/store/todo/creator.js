@@ -5,6 +5,7 @@ import {
     UPDATE_TODO_CONTENT,
     TOGGLE_TODO_COMPLETE,
     CHANGE_FILTER,
+    DELETE_ALL_TODO,
 } from './actions.js'
 
 const getTodos = (todos) => {
@@ -59,6 +60,12 @@ const changeFilter = (filter) => {
         },
     }
 }
+
+const deleteAllTodo = () => {
+    return {
+        type: DELETE_ALL_TODO,
+    }
+}
 export {
     getTodos,
     createTodo,
@@ -66,4 +73,5 @@ export {
     updateTodoContent,
     toggleTodoComplete,
     changeFilter,
+    deleteAllTodo,
 }

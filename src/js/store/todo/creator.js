@@ -4,6 +4,7 @@ import {
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
     TOGGLE_TODO_COMPLETE,
+    CHANGE_FILTER,
 } from './actions.js'
 
 const getTodos = (todos) => {
@@ -50,10 +51,19 @@ const toggleTodoComplete = (id) => {
         },
     }
 }
+const changeFilter = (filter) => {
+    return {
+        type: CHANGE_FILTER,
+        payload: {
+            filter,
+        },
+    }
+}
 export {
     getTodos,
     createTodo,
     deleteTodo,
     updateTodoContent,
     toggleTodoComplete,
+    changeFilter,
 }

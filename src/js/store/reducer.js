@@ -9,12 +9,15 @@ import {
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
+    CHANGE_FILTER,
     TOGGLE_TODO_COMPLETE,
 } from "./todo/actions.js";
+import { FILTER_TYPE } from "../utils/constants.js";
 
 let initialState = {
     users: [],
     todos: [],
+    filter: FILTER_TYPE.ALL,
 }
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
@@ -67,6 +70,11 @@ const reducer = (state = initialState, action = {}) => {
                     }
                     return todo;
                 })
+            }
+        case CHANGE_FILTER:
+            return {
+                ...state,
+                filter: action.payload.filter,
             }
         default:
             return state;

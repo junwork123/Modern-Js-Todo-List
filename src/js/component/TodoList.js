@@ -2,6 +2,7 @@ import Component from "../core/Component.js";
 import { store } from "../store/index.js";
 import { deleteTodo, updateTodoContent, toggleTodoComplete } from "../store/todo/creator.js";
 import { TODO_STATUS } from "../utils/constants.js";
+import { isFilteredTodo } from "../utils/filter.js";
 
 const TodoItem = (todo) => {
     const { id, content, completed, } = todo;
@@ -23,19 +24,24 @@ const renderTodoList = (todos) => {
     return todos && todos.map((todo) => TodoItem(todo)).join('');
 }
 
+const filterTodoList = (todos, filter) => {
+    return todos && todos.filter((todo) => isFilteredTodo (filter, todo));
+}
+
 export default class TodoList extends Component {
     initState () { return {}; }
     mounted () {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template () {
-        const { todos } = store.getState();
+        const { todos, filter } = store.getState();
+        const filteredTodos = filterTodoList(todos, filter);
 
         // 컴포넌트의 내용을 반환
         // join을 하지 않으면 ','까지 같이 출력된다
         return `
             <ul class="todo-list">
-                ${renderTodoList(todos)}
+                ${renderTodoList(filteredTodos)}
             </ul>
         `;
     }
@@ -92,7 +98,6 @@ export default class TodoList extends Component {
         if(!newContent) { return; }
         store.dispatch(updateTodoContent(todoItem.dataset.id, newContent));
     }
-
     getTargetTodoItem(event) {
         return event.target.closest('li');
     }

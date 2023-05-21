@@ -1,10 +1,14 @@
 import Component from "../core/Component.js";
 import {store} from "../store/index.js";
-import {createUser, deleteUser} from "../store/user/creator.js";
+import {createUser, deleteUser,selectUser} from "../store/user/creator.js";
 
-const UserListItem = (user) => {
+const setActiveUser = (isSelected) => {
+    return isSelected ? 'active' : '';
+}
+const UserListItem = (user, isSelected) => {
+
     return `
-        <button class='ripple'>
+        <button class='ripple ${setActiveUser(isSelected)}' data-username="${user.name}">
             ${user.name}
         </button>
     `
@@ -16,11 +20,11 @@ export default class UserList extends Component {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template () {
-        const { users } = store.getState();
+        const { users, selectedUser } = store.getState();
         return `
             <div id="user-list">
                 ${ users && users.map( (user) => 
-                    UserListItem(user)
+                    UserListItem(user, selectedUser === user.name)
                 )}
                 <button class="ripple user-create-button" data-action="createUser">
                     + 유저 생성
@@ -34,6 +38,7 @@ export default class UserList extends Component {
     setEvent () {
         this.clickCreateButton();
         this.clickDeleteButton();
+        this.clickUserItem();
     }
 
     clickDeleteButton() {
@@ -79,10 +84,12 @@ export default class UserList extends Component {
     }
 
     getUsers() {
-        return store.getState();
+        const { users } = store.getState();
+        if (users) { return users; }
+        return [];
     }
     isUserExist(userName) {
-        const { users } = this.getUsers();
+        const users = this.getUsers();
         return users.find(user => user.name === userName);
     }
     isUserNotExist(userName) {
@@ -94,5 +101,18 @@ export default class UserList extends Component {
     deleteUser(userName) {
         if(this.isUserNotExist(userName)){ return false; }
         store.dispatch(deleteUser(userName));
+    }
+
+    clickUserItem() {
+        this.addEvent('click', '#user-list .ripple', (event) => {
+            const userName = event.target.dataset.username;
+            this.selectUser(userName);
+        });
+    }
+
+    selectUser(userName) {
+        const { selectedUser } = store.getState();
+        if (selectedUser.name === userName) { return; }
+        store.dispatch(selectUser(userName))
     }
 }

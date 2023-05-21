@@ -1,5 +1,4 @@
 import {
-    GET_TODOS,
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
@@ -7,15 +6,6 @@ import {
     CHANGE_FILTER,
     DELETE_ALL_TODO,
 } from './actions.js'
-
-const getTodos = (todos) => {
-    return {
-        type: GET_TODOS,
-        payload: {
-            todos,
-        },
-    }
-}
 
 const createTodo = (todo) => {
     return {
@@ -67,7 +57,6 @@ const deleteAllTodo = () => {
     }
 }
 export {
-    getTodos,
     createTodo,
     deleteTodo,
     updateTodoContent,

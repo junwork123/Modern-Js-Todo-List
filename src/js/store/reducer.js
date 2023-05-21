@@ -1,11 +1,10 @@
 import {
-    GET_USERS,
     CREATE_USER,
     DELETE_USER,
+    SELECT_USER,
 } from "./user/actions.js";
 
 import {
-    GET_TODOS,
     CREATE_TODO,
     DELETE_TODO,
     UPDATE_TODO_CONTENT,
@@ -19,14 +18,10 @@ let initialState = {
     users: [],
     todos: [],
     filter: FILTER_TYPE.ALL,
+    selectedUser: "-",
 }
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
-        case GET_USERS:
-            return {
-                ...state,
-                ...action.payload,
-            }
         case CREATE_USER:
             return {
                 ...state,
@@ -37,10 +32,10 @@ const reducer = (state = initialState, action = {}) => {
                 ...state,
                 users: state.users.filter(user => user.name !== action.payload.name),
             }
-        case GET_TODOS:
+        case SELECT_USER:
             return {
                 ...state,
-                ...action.payload,
+                selectedUser: action.payload.name,
             }
         case CREATE_TODO:
             return {

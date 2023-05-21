@@ -1,17 +1,8 @@
 import {
-    GET_USERS,
     CREATE_USER,
     DELETE_USER,
+    SELECT_USER,
 } from './actions.js'
-
-const getUsers = (users) => {
-    return {
-        type: GET_USERS,
-        payload: {
-            users,
-        },
-    }
-}
 
 const createUser = (name) => {
     return {
@@ -30,4 +21,17 @@ const deleteUser = (name) => {
         },
     }
 }
-export { getUsers, createUser, deleteUser }
+
+const selectUser = (name) => {
+    return {
+        type: SELECT_USER,
+        payload: {
+            name,
+        },
+    }
+}
+export {
+    createUser,
+    deleteUser,
+    selectUser
+}

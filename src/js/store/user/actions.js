@@ -1,9 +1,9 @@
-const GET_USERS = 'GET_USERS'
 const CREATE_USER = 'CREATE_USER'
 const DELETE_USER = 'DELETE_USER'
+const SELECT_USER = 'SELECT_USER'
 
 export {
-    GET_USERS,
     CREATE_USER,
     DELETE_USER,
+    SELECT_USER,
 }

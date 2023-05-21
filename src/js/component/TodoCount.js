@@ -1,11 +1,15 @@
 import Component from "../core/Component.js";
-import { store } from "../store/index.js";
-import { changeFilter, deleteAllTodo } from "../store/todo/creator.js";
 import { FILTER_TYPE } from "../utils/constants.js";
-import { filteredTodo } from "../utils/filter.js";
+import { filteredTodoList } from "../utils/filter.js";
+import {
+    changeFilter,
+    deleteAllTodo,
+    getFilter,
+    getSelectedUserTodoList,
+} from "../store/todo/creator.js";
 
 const renderTodoCount = (todos, filter) => {
-    const count = todos && todos.filter(todo => filteredTodo (filter, todo)).length;
+    const count = filteredTodoList(filter, todos).length;
     return '총 <strong>' + count + '</strong> 개';
 }
 
@@ -32,7 +36,8 @@ export default class TodoCount extends Component {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template() {
-        const { todos, filter } = store.getState();
+        const todos = getSelectedUserTodoList();
+        const filter = getFilter();
         return `
             <span class="todo-count">
                 ${renderTodoCount(todos, filter)}
@@ -50,19 +55,24 @@ export default class TodoCount extends Component {
     }
     onClickFilter() {
         this.addEvent('click', '.filters a', (event) => {
-            const filter = event.target.className;
-            this.changeFilter(filter);
-            this.render();
+            this.changeFilterType(event);
         })
     }
-    changeFilter(filter) {
-        store.dispatch(changeFilter(filter));
+
+    changeFilterType(event) {
+        const filter = event.target.className;
+        changeFilter(filter);
+        this.render();
     }
 
     onClickDeleteAllButton() {
         this.addEvent('click', '.clear-completed', (event) => {
-            if(!confirm('정말 삭제하시겠습니까?')) { return; }
-            store.dispatch(deleteAllTodo());
+            this.deleteAllTodo();
         })
+    }
+
+    deleteAllTodo() {
+        if (!confirm('정말 삭제하시겠습니까?')) { return; }
+        deleteAllTodo();
     }
 }

@@ -1,6 +1,7 @@
 import {
     CREATE_USER,
     DELETE_USER,
+    SELECT_USER,
 } from "./user/actions.js";
 
 import {
@@ -17,7 +18,7 @@ let initialState = {
     users: [],
     todos: [],
     filter: FILTER_TYPE.ALL,
-    selectedUser: "",
+    selectedUser: "-",
 }
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
@@ -30,6 +31,11 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 users: state.users.filter(user => user.name !== action.payload.name),
+            }
+        case SELECT_USER:
+            return {
+                ...state,
+                selectedUser: action.payload.name,
             }
         case CREATE_TODO:
             return {

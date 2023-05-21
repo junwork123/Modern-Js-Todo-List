@@ -1,17 +1,7 @@
 import {
-    GET_USERS,
     CREATE_USER,
     DELETE_USER,
 } from './actions.js'
-
-const getUsers = (users) => {
-    return {
-        type: GET_USERS,
-        payload: {
-            users,
-        },
-    }
-}
 
 const createUser = (name) => {
     return {
@@ -30,4 +20,4 @@ const deleteUser = (name) => {
         },
     }
 }
-export { getUsers, createUser, deleteUser }
+export { createUser, deleteUser }

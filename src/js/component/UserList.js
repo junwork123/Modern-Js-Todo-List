@@ -79,10 +79,12 @@ export default class UserList extends Component {
     }
 
     getUsers() {
-        return store.getState();
+        const { users } = store.getState();
+        if (users) { return users; }
+        return [];
     }
     isUserExist(userName) {
-        const { users } = this.getUsers();
+        const users = this.getUsers();
         return users.find(user => user.name === userName);
     }
     isUserNotExist(userName) {

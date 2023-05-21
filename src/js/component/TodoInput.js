@@ -34,6 +34,7 @@ export default class TodoInput extends Component {
   createTodoItem(content) {
     const newTodoItem = {
       id: String(Date.now()),
+      user: store.getState().selectedUser,
       content: content,
       completed: false
     };

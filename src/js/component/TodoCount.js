@@ -2,10 +2,10 @@ import Component from "../core/Component.js";
 import { store } from "../store/index.js";
 import { changeFilter, deleteAllTodo } from "../store/todo/creator.js";
 import { FILTER_TYPE } from "../utils/constants.js";
-import { isFilteredTodo } from "../utils/filter.js";
+import { filteredTodo } from "../utils/filter.js";
 
 const renderTodoCount = (todos, filter) => {
-    const count = todos && todos.filter(todo => isFilteredTodo (filter, todo)).length;
+    const count = todos && todos.filter(todo => filteredTodo (filter, todo)).length;
     return '총 <strong>' + count + '</strong> 개';
 }
 

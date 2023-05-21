@@ -1,6 +1,6 @@
 import { FILTER_TYPE } from "./constants.js";
 
-const isFilteredTodo = (filter, todo) => {
+const filteredTodo = (filter, todo) => {
     switch (filter) {
         case FILTER_TYPE.ACTIVE:
             return !todo.completed;
@@ -11,4 +11,8 @@ const isFilteredTodo = (filter, todo) => {
     }
 }
 
-export { isFilteredTodo }
+const filteredTodoList = (filter, todos) => {
+    return todos && todos.filter((todo) => filteredTodo (filter, todo));
+}
+
+export { filteredTodo, filteredTodoList }

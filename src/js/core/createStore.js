@@ -6,7 +6,9 @@ export const createStore = (reducer) => {
 
     // reducer 가 실행될 때
     // 반환하는 객체 State 를 Observable 로 만든다.
-    const state = observable(reducer());
+    const initialState = reducer();
+    const storedState = JSON.parse(localStorage.getItem("state"));
+    const state = observable(storedState || initialState);
 
     const dispatch = (action) => {
         // 액션을 실행한다.
@@ -18,6 +20,8 @@ export const createStore = (reducer) => {
             if(!state[key]) continue;
             state[key] = value;
         }
+        // 변경된 state를 localStorage에 저장한다.
+        localStorage.setItem("state", JSON.stringify(state));
     }
 
     // state 를 변경할 수 없도록 한 frozenState 를 만든다.

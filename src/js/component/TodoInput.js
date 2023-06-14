@@ -1,6 +1,6 @@
 import Component from "../core/Component.js";
-import { store } from "../store/index.js";
 import { createTodo } from "../store/todo/creator.js";
+import { getSelectedUser } from "../store/user/creator.js";
 
 export default class TodoInput extends Component {
   initState() { return {}; }
@@ -23,21 +23,23 @@ export default class TodoInput extends Component {
 
   enterTodoItem() {
     this.addEvent("keydown", ".new-todo", (event) => {
-      const content = event.target.value;
-      if (event.key === "Enter" && content) {
-        this.createTodoItem(content);
-        event.target.value = "";
-      }
+        this.createTodoItem(event);
     });
   }
 
-  createTodoItem(content) {
+  createTodoItem(event) {
+    const content = event.target.value;
+    const isCreateEvent = event.key === "Enter" && content;
+    if (!isCreateEvent) { return; }
+
     const newTodoItem = {
       id: String(Date.now()),
-      user: store.getState().selectedUser,
+      user: getSelectedUser(),
       content: content,
       completed: false
     };
-    store.dispatch(createTodo(newTodoItem));
+    createTodo(newTodoItem);
+
+    event.target.value = ""; // input 초기화
   }
 }

@@ -1,8 +1,13 @@
 import Component from "../core/Component.js";
-import { store } from "../store/index.js";
 import { TODO_STATUS } from "../utils/constants.js";
-import { selectedUserTodoList } from "../utils/storeUtils.js";
-import { deleteTodo, updateTodoContent, toggleTodoComplete } from "../store/todo/creator.js";
+import { filteredTodoList } from "../utils/filter.js";
+import {
+    deleteTodo,
+    updateTodoContent,
+    toggleTodoComplete,
+    getSelectedUserTodoList,
+    getFilter,
+} from "../store/todo/creator.js";
 
 const TodoItem = (todo) => {
     const { id, content, completed, } = todo;
@@ -30,13 +35,15 @@ export default class TodoList extends Component {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template () {
-        const todos = selectedUserTodoList()
+        const todos = getSelectedUserTodoList()
+        const filter = getFilter();
+        const filteredTodos = filteredTodoList(filter, todos);
 
         // 컴포넌트의 내용을 반환
         // join을 하지 않으면 ','까지 같이 출력된다
         return `
             <ul class="todo-list">
-                ${renderTodoList(todos)}
+                ${renderTodoList(filteredTodos)}
             </ul>
         `;
     }
@@ -49,50 +56,80 @@ export default class TodoList extends Component {
     }
     onClickDeleteButton() {
         this.addEvent('click', '.destroy', (event) => {
-            if(!confirm('정말 삭제하시겠습니까?')) { return; }
-
-            const todoItem = this.getTargetTodoItem(event);
-            this.deleteTodoItem(todoItem);
+            this.deleteTodoItem(event);
         })
     }
+
+    deleteTodoItem(event) {
+        if (!confirm('정말 삭제하시겠습니까?')) { return; }
+
+        const todoItem = this.getTargetTodoItem(event);
+        deleteTodo(todoItem.dataset.id);
+    }
+
     onClickCompleteButton() {
         this.addEvent('click', '.toggle', (event) => {
-            const todoItem = this.getTargetTodoItem(event);
-            this.toggleTodoComplete(todoItem);
-            this.render();
+            this.toggleTodoComplete(event);
         })
     }
+
+    toggleTodoComplete(event) {
+        const todoItem = this.getTargetTodoItem(event);
+        toggleTodoComplete(todoItem.dataset.id);
+        this.render();
+    }
+
     onDoubleClickTodoItem() {
         this.addEvent('dblclick', 'li', (event) => {
-            const todoItem = this.getTargetTodoItem(event);
-            todoItem.classList.add(TODO_STATUS.EDITING);
+            this.changeTodoStatus(event);
         })
     }
+
+    changeTodoStatus(event) {
+        const todoItem = this.getTargetTodoItem(event);
+        todoItem.classList.add(TODO_STATUS.EDITING);
+    }
+
     onEditTodoItem() {
         this.addEvent('keydown', '.edit', (event) => {
-            const todoItem = this.getTargetTodoItem(event);
-            const editingTodoItem = event.target;
-            const originValue = editingTodoItem.dataset.origin;
-
-            switch (event.key) {
-                case 'Escape':
-                    editingTodoItem.value = originValue;
-                    todoItem.classList.remove(TODO_STATUS.EDITING);
-                    break;
-                case 'Enter':
-                    this.updateTodoContent(todoItem, editingTodoItem.value);
-                    todoItem.classList.remove(TODO_STATUS.EDITING);
-                    this.render();
-                    break;
-            }
+            this.editTodoItem(event);
         });
     }
-    deleteTodoItem(todoItem) { store.dispatch(deleteTodo(todoItem.dataset.id)); }
-    toggleTodoComplete(todoItem) { store.dispatch(toggleTodoComplete(todoItem.dataset.id)); }
-    updateTodoContent(todoItem, newContent) {
-        if(!newContent) { return; }
-        store.dispatch(updateTodoContent(todoItem.dataset.id, newContent));
+
+    editTodoItem(event) {
+        const {todoItem, editingTodoItem, originValue} = this.getEditingContext(event);
+
+        switch (event.key) {
+            case 'Escape':
+                this.cancelEditing(editingTodoItem, originValue, todoItem);
+                break;
+            case 'Enter':
+                this.updateTodoContent(editingTodoItem, todoItem);
+                break;
+        }
     }
+
+    getEditingContext(event) {
+        const todoItem = this.getTargetTodoItem(event);
+        const editingTodoItem = event.target;
+        const originValue = editingTodoItem.dataset.origin;
+        return {todoItem, editingTodoItem, originValue};
+    }
+
+    updateTodoContent(editingTodoItem, todoItem) {
+        const newContent = editingTodoItem.value;
+        // if(!newContent) { return; }
+
+        updateTodoContent(todoItem.dataset.id, newContent);
+        todoItem.classList.remove(TODO_STATUS.EDITING);
+        this.render();
+    }
+
+    cancelEditing(editingTodoItem, originValue, todoItem) {
+        editingTodoItem.value = originValue;
+        todoItem.classList.remove(TODO_STATUS.EDITING);
+    }
+
     getTargetTodoItem(event) {
         return event.target.closest('li');
     }

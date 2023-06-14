@@ -15,4 +15,5 @@ const filteredTodoList = (filter, todos) => {
     return todos && todos.filter((todo) => filteredTodo (filter, todo));
 }
 
+
 export { filteredTodo, filteredTodoList }

@@ -1,12 +1,17 @@
 import Component from "../core/Component.js";
-import {store} from "../store/index.js";
-import {createUser, deleteUser,selectUser} from "../store/user/creator.js";
-
+import {
+    createUser,
+    deleteUser,
+    selectUser,
+    getUserList,
+    getSelectedUser,
+    isUserExist,
+    isUserNotExist,
+} from "../store/user/creator.js";
 const setActiveUser = (isSelected) => {
     return isSelected ? 'active' : '';
 }
 const UserListItem = (user, isSelected) => {
-
     return `
         <button class='ripple ${setActiveUser(isSelected)}' data-username="${user.name}">
             ${user.name}
@@ -20,7 +25,8 @@ export default class UserList extends Component {
         // 컴포넌트가 마운트된 후에 동작한다.
     }
     template () {
-        const { users, selectedUser } = store.getState();
+        const users = getUserList();
+        const selectedUser = getSelectedUser();
         return `
             <div id="user-list">
                 ${ users && users.map( (user) => 
@@ -43,23 +49,26 @@ export default class UserList extends Component {
 
     clickDeleteButton() {
         this.addEvent('click', '.user-delete-button', (event) => {
-            const userName = prompt('삭제하고 싶은 이름을 입력해주세요')
-
-            if (!userName) {
-                alert('이름을 반드시 입력해야 합니다.');
-                return false;
-            }
-            if (userName.length < 2) { // 제시된 제약조건
-                alert('사용자 이름은 2글자 이상이어야 합니다.');
-                return false;
-            }
-            if (this.isUserNotExist(userName)) {
-                alert('존재하지 않는 이름입니다.');
-                return false;
-            }
-
-            this.deleteUser(userName);
+            return this.deleteUser();
         });
+    }
+
+    deleteUser() {
+        const userName = prompt('삭제하고 싶은 이름을 입력해주세요')
+
+        if (!userName) {
+            alert('이름을 반드시 입력해야 합니다.');
+            return false;
+        }
+        if (userName.length < 2) { // 제시된 제약조건
+            alert('사용자 이름은 2글자 이상이어야 합니다.');
+            return false;
+        }
+        if (isUserNotExist(userName)) {
+            alert('존재하지 않는 이름입니다.');
+            return false;
+        }
+        deleteUser(userName);
     }
 
     clickCreateButton() {
@@ -74,45 +83,26 @@ export default class UserList extends Component {
                 alert('사용자 이름은 2글자 이상이어야 합니다.');
                 return false;
             }
-            if (this.isUserExist(userName)) {
+            if (isUserExist(userName)) {
                 alert('이미 존재하는 이름입니다.');
                 return false;
             }
 
-            this.createUser(userName);
+            createUser(userName);
         });
     }
-
-    getUsers() {
-        const { users } = store.getState();
-        if (users) { return users; }
-        return [];
-    }
-    isUserExist(userName) {
-        const users = this.getUsers();
-        return users.find(user => user.name === userName);
-    }
-    isUserNotExist(userName) {
-        return !this.isUserExist(userName);
-    }
-    createUser(userName) {
-        store.dispatch(createUser(userName));
-    }
-    deleteUser(userName) {
-        if(this.isUserNotExist(userName)){ return false; }
-        store.dispatch(deleteUser(userName));
-    }
-
     clickUserItem() {
         this.addEvent('click', '#user-list .ripple', (event) => {
-            const userName = event.target.dataset.username;
-            this.selectUser(userName);
+            this.createUser(event);
         });
     }
 
-    selectUser(userName) {
-        const { selectedUser } = store.getState();
-        if (selectedUser.name === userName) { return; }
-        store.dispatch(selectUser(userName))
+    createUser(event) {
+        const selectedUser = getSelectedUser();
+        const userName = event.target.dataset.username;
+        if (selectedUser.name === userName) {
+            return;
+        }
+        selectUser(userName);
     }
 }
